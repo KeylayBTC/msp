@@ -1,0 +1,32 @@
+{
+  "suite": "msp-v1",
+  "section": "5.1-5.2",
+  "name": "derivation-basic",
+  "inputs": {
+    "code_as_typed": [
+      "7k4m2xqtb9",
+      "7K4M2XQTB9",
+      "7k4m-2xqt-b9",
+      "7k4m · 2xqt · b9",
+      "  7K4M 2XQT B9  "
+    ]
+  },
+  "expect": {
+    "code": "7k4m2xqtb9",
+    "salt_v1": "d1db8c9013968b828b2172582e5cf96c76b8ba82ea1e646406c3316f99b717fc",
+    "kdf": 1,
+    "iterations": 300000,
+    "K_code": "53ceab3fedbbfdcad80e4560dd51358b30a798ef6f556937b17625741a5bf608",
+    "channel_id": "9863a5bb51a2457e808fba35e35ef557caadaf0fda30a7de870ef0afab74520c"
+  },
+  "refusals": [
+    {
+      "code_as_typed": "7k4m2xqtbа",
+      "normalized": "7k4m2xqtb",
+      "expect": "REJECT_TOO_SHORT"
+    }
+  ],
+  "notes": [
+    "'7k4m2xqtbo' and '7k4m2xqtb0' are distinct valid codes, not errors."
+  ]
+}

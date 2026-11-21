@@ -1,0 +1,34 @@
+{
+  "suite": "msp-v1",
+  "section": "6.8",
+  "name": "sas-three-participants",
+  "inputs": {
+    "code": "7k4m2xqtb9",
+    "channel_id": "9863a5bb51a2457e808fba35e35ef557caadaf0fda30a7de870ef0afab74520c",
+    "participants": [
+      {
+        "pk": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "r": "1111111111111111111111111111111111111111111111111111111111111111",
+        "cm": "f6266ec7fcfafd404584394caec073da4d02593143d8f66f736deed85a55f907"
+      },
+      {
+        "pk": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "r": "2222222222222222222222222222222222222222222222222222222222222222",
+        "cm": "5cd93083bf6bb4bfd9956f9c8cd5341db3b99c02d5a10eff95578969ae16d252"
+      },
+      {
+        "pk": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+        "r": "3333333333333333333333333333333333333333333333333333333333333333",
+        "cm": "9e0196dba0ee34c2b67bc31d9f5082c151151a582d0c6fcf6231e9a5dc17645a"
+      }
+    ]
+  },
+  "expect": {
+    "sas_input_preimage": "4d53502d56312d5341539863a5bb51a2457e808fba35e35ef557caadaf0fda30a7de870ef0afab74520c03a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a11111111111111111111111111111111111111111111111111111111111111111b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b22222222222222222222222222222222222222222222222222222222222222222c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c333333333333333333333333333333333333333333333333333333333333333330000",
+    "sas_input": "2b389f3f144e2d4ffa4831a4e6e7afe5491af56a331cb165a1ec52506a904a79",
+    "SAS": "4WUZ-4HN9-4GF8"
+  },
+  "notes": [
+    "All three participants must compute the same string. The SAS covers channel_id, n, and every participant's (pk || r) in byte-wise order of pk; it does not cover the descriptor (DESCRIPTOR_CONFIRM does that under the authenticated keys). Each r must open the cm from that participant's hello. The rendering reduces the whole 256-bit digest modulo 31^12."
+  ]
+}
