@@ -3,7 +3,7 @@
 **An encrypted session layer for remote bitcoin multisig setup and signing.**
 Draft specification · `v0.1-draft.2` (2026-11-18) · not frozen · no conforming implementation yet · no external review yet
 
-[![vectors](https://github.com/KeylayBTC/msp/actions/workflows/vectors.yml/badge.svg)](https://github.com/KeylayBTC/msp/actions/workflows/vectors.yml) · [Specification](spec/msp-spec-v0.1-draft.md) · [Explainer](spec/msp-explainer.md) · [Test vectors](vectors/) · [Review questions](spec/review-questions.md) · [Discussion on Delving Bitcoin](DELVING-URL) · [Changelog](CHANGELOG.md)
+[![vectors](https://github.com/KeylayBTC/msp/actions/workflows/vectors.yml/badge.svg)](https://github.com/KeylayBTC/msp/actions/workflows/vectors.yml) · [Specification](spec/msp-spec-v0.1-draft.md) · [Explainer](spec/msp-explainer.md) · [Test vectors](vectors/) · [Review questions](spec/review-questions.md) · [Discussion on Delving Bitcoin](https://delvingbitcoin.org/t/multisig-session-protocol-draft-spec-for-remote-multisig-setup-and-signing-needs-review/3103) · [Changelog](CHANGELOG.md)
 
 ---
 
@@ -79,7 +79,7 @@ Blind Relay / Signing Room (Carlin, 2026) — relay confidentiality, SDK, capabi
 - **Review** the open constructions ([#1](https://github.com/KeylayBTC/msp/issues/1)–[#4](https://github.com/KeylayBTC/msp/issues/4)). This is the most valuable thing a reader with a cryptography background can do. Each issue states what the author believes, so a reviewer can answer "yes, because…" or "no, because…" rather than start from nothing.
 - **Implement the signer role** in any language against `vectors/`. The signer role is deliberately small (spec §9). A partial implementation that fails a vector is more useful than a review that agrees in prose.
 - **Hardware-wallet and coordinator maintainers:** tell us what payload-size and frame-count limits your device reads reliably ([#5](https://github.com/KeylayBTC/msp/issues/5)); spec §7.3 needs the numbers.
-- **Ask.** Issues and Discussions are open. Delving Bitcoin thread: [link](DELVING-URL).
+- **Ask.** Issues and Discussions are open. Delving Bitcoin thread: [link](https://delvingbitcoin.org/t/multisig-session-protocol-draft-spec-for-remote-multisig-setup-and-signing-needs-review/3103).
 
 Presented at Blockchain Commons' Gordian Developers meeting (August 2026) and TABConf 8 (October 2026).
 Contact: Stan Reeves · contact@keylay.org · [@onedigitmoney](https://github.com/onedigitmoney)
