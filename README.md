@@ -14,10 +14,23 @@ BIP-129 (BSMS) standardized the file a multisig setup produces. Nothing standard
 MSP defines the three things BSMS and PSBT leave undefined for remote participants:
 
 1. **Session establishment** — how participants who share a short code out of band form a private, ephemeral, encrypted channel over an untrusted relay.
-2. **Message vocabulary** — typed, authenticated, replay-protected envelopes that carry key contributions, descriptors, and PSBTs. Setup is symmetric: every participant sends its key to every other participant, assembles the wallet descriptor itself by a deterministic function, and confirms that everyone assembled the same one. Nobody distributes a descriptor, so there is no coordinator to compromise. Every signer refuses to sign a PSBT that does not spend from that descriptor.
+2. **Message vocabulary** — typed, authenticated, replay-protected envelopes that carry key contributions, descriptor confirmations, and PSBTs. Every session begins with a short authentication string the two people compare before anything else is sent. Setup is symmetric: every participant sends its key to every other participant, assembles the wallet descriptor itself by a deterministic function, and confirms that everyone assembled the same one. Nobody distributes a descriptor, so there is no coordinator to compromise. Every signer refuses to sign a PSBT that does not spend from a wallet both parties hold.
 3. **Transport bindings** — a WebSocket relay, Nostr (planned), and QR codes across an air gap (BC-UR / BBQr).
 
 It defines no payload formats, no wallet logic, and no identity system. A wallet that already implements BSMS has most of what it needs.
+
+## Documents
+
+| Read this | If you want |
+|---|---|
+| [**Specification**](spec/msp-spec-v0.1-draft.md) — `v0.1-draft.2`, 2026-11-18 | The normative text: session establishment (§5), messages and ceremonies (§6), transport bindings (§7), lifecycle (§8), test vectors (§10), the shipping-app differences (§14), and the deferred profiles (Appendix A). Read §1.3 *Limitations* first. |
+| [**Explainer**](spec/msp-explainer.md) | The reason behind every decision, in plain language, section numbers matching the spec. Start here if you want to know *why* before *what*. |
+| [**Review questions**](spec/review-questions.md) | The four open cryptographic questions, each with what the author believes, so a reviewer can answer yes or no rather than start from nothing. Filed as issues #1–#4. |
+| [**Changelog**](CHANGELOG.md) | Every normative change, dated, including the 2026-11-18 revision that moved the SAS comparison ahead of every other message. |
+| [`spec/notes/`](spec/notes/) | Design studies behind the larger decisions: symmetric assembly, the SAS commitment, and the deferred three-key routes. |
+| [`spec/defects/`](spec/defects/) | The author's own defect reports against earlier drafts. |
+| [`vectors/`](vectors/) and [`tools/verify-vectors.py`](tools/verify-vectors.py) | Known-answer tests and the checker that runs on every push. |
+| [`spec/conformance-suite-spec-v0.1-draft.md`](spec/conformance-suite-spec-v0.1-draft.md) | **Superseded.** Describes draft.1; its rewrite is scheduled. Kept so the history is visible. |
 
 ## What runs today
 
@@ -33,7 +46,7 @@ Read these before the spec. They are stated at greater length in spec §1.3.
 
 - **Two clients at a time.** A v0.1 session has two participants. Setup therefore creates **two-key wallets** (threshold 1 or 2); signing works for any wallet both parties hold on BIP-48 paths, however it was created, so a 2-of-3 made elsewhere is signed by two of its cosigners in one session. The ceremony layer is n-party by construction; a three-key setup waits for the group-session work (Appendix B item 4).
 - **Both parties online.** Asynchronous sessions are the version-2 target. A profile is specified (Appendix A.1); it is not part of v0.1.
-- **No external cryptographic review.** The SAS (§6.8) was found in October to lack a commitment phase; this draft adopts a commitment-in-hello construction (each hello commits to a nonce; both nonces are revealed in a dedicated message and the SAS is compared before any terms, keys, or transactions are sent) that the author believes restores the intended bound, pending review ([#1](ISSUE-1)). An external *design* review of draft.1 was received and closed on 2026-11-18; draft.2 is the result. That review did not cover the cryptography. The join (§5.3) uses an HMAC under a stretched code rather than a standardized PAKE; a split-code CPace join is proposed and not adopted ([#3](ISSUE-3)). Both are stated in the spec's own words in [`spec/review-questions.md`](spec/review-questions.md).
+- **No external cryptographic review.** The SAS (§6.8) was found in October to lack a commitment phase; this draft adopts a commitment-in-hello construction (each hello commits to a nonce; both nonces are revealed in a dedicated message and the SAS is compared before any terms, keys, or transactions are sent) that the author believes restores the intended bound, pending review ([#1](https://github.com/KeylayBTC/msp/issues/1)). An external *design* review of draft.1 was received and closed on 2026-11-18; draft.2 is the result. That review did not cover the cryptography. The join (§5.3) uses an HMAC under a stretched code rather than a standardized PAKE; a split-code CPace join is proposed and not adopted ([#3](https://github.com/KeylayBTC/msp/issues/3)). Both are stated in the spec's own words in [`spec/review-questions.md`](spec/review-questions.md).
 - **Test vectors incomplete.** Normalization, the hello with its commitment and MAC, the SAS over keys and nonces, and descriptor assembly have vectors; pairwise key derivation, envelope encryption, and the end-to-end setup and signing transcripts do not yet. `spec/conformance-suite-spec-v0.1-draft.md` describes draft.1 and is marked superseded; its rewrite is scheduled.
 - **No Taproot multisig.** `script_type = 1` is reserved and rejected in v0.1.
 - **No post-quantum protection.**
@@ -63,9 +76,9 @@ Blind Relay / Signing Room (Carlin, 2026) — relay confidentiality, SDK, capabi
 
 ## How to get involved
 
-- **Review** the open constructions ([#1](ISSUE-1)–[#4](ISSUE-4)). This is the most valuable thing a reader with a cryptography background can do. Each issue states what the author believes, so a reviewer can answer "yes, because…" or "no, because…" rather than start from nothing.
+- **Review** the open constructions ([#1](https://github.com/KeylayBTC/msp/issues/1)–[#4](https://github.com/KeylayBTC/msp/issues/4)). This is the most valuable thing a reader with a cryptography background can do. Each issue states what the author believes, so a reviewer can answer "yes, because…" or "no, because…" rather than start from nothing.
 - **Implement the signer role** in any language against `vectors/`. The signer role is deliberately small (spec §9). A partial implementation that fails a vector is more useful than a review that agrees in prose.
-- **Hardware-wallet and coordinator maintainers:** tell us what payload-size and frame-count limits your device reads reliably ([#5](ISSUE-5)); spec §7.3 needs the numbers.
+- **Hardware-wallet and coordinator maintainers:** tell us what payload-size and frame-count limits your device reads reliably ([#5](https://github.com/KeylayBTC/msp/issues/5)); spec §7.3 needs the numbers.
 - **Ask.** Issues and Discussions are open. Delving Bitcoin thread: [link](DELVING-URL).
 
 Presented at Blockchain Commons' Gordian Developers meeting (August 2026) and TABConf 8 (October 2026).
